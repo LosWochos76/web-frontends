@@ -1,0 +1,35 @@
+<div class="col-md-12">
+    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
+	  <div class="form-group">
+		<label for="email">E-Mail:</label>
+		<input type="email" class="form-control" 
+		  id="email" name="username"
+		  [ngModel]="user_email"
+		  required 
+		  #email="ngModel" email>
+		  <span class="help-box" *ngIf="!email.valid && email.touched">Please enter a valid email-adress!</span>
+	  </div>
+	  <div class="form-group">
+		<label for="password">Password:</label>
+		<input type="password" class="form-control" 
+		  id="password" name="password"
+		  [ngModel]="user_password"
+		  required
+		  #password="ngModel" password>
+		  <span class="help-box" *ngIf="!password.valid && password.touched">Please enter a valid password!</span>
+	  </div>
+	  <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Login</button>
+	</form>
+	<br>
+	<div *ngIf="error_message">
+	  <div class="alert alert-danger">
+        <strong>{{error_message}}</strong>
+      </div>
+      <button class="btn btn-primary" (click)="onPasswordForgotten(form)">I have forgotten my Password</button>
+    </div>
+    <div *ngIf="other_message">
+      <div class="alert alert-info">
+        <strong>{{other_message}}</strong>
+      </div>
+    </div>
+</div>

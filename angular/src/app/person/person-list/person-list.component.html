@@ -1,0 +1,13 @@
+<div class="row">
+  <div class="col-md-12">
+    <a routerLink="/person/new" class="btn btn-primary">New Person</a>
+    <a class="btn btn-primary" [ngClass]="current ? '' : 'disabled'" (click)="onEdit()">Edit Person</a>
+    <a class="btn btn-danger" [ngClass]="current ? '' : 'disabled'" (click)="onDelete()">Delete Person</a>
+    <hr>
+    <div class="list-group">
+      <a class="list-group-item" [ngClass]="current==person ? 'active' : ''" *ngFor="let person of all" (click)="onSelect(person)">
+        {{person.toString()}}
+      </a>
+    </div>
+  </div>
+</div>

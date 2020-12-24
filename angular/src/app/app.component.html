@@ -1,0 +1,19 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" routerLink="/">SeminarManager</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li *ngIf="isLoggedIn" routerLinkActive="active"><a routerLink="person">People</a></li>
+      <li *ngIf="isLoggedIn" routerLinkActive="active"><a routerLink="seminar">Seminars</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li *ngIf="!isLoggedIn" routerLinkActive="active"><a routerLink="login">Login</a></li>
+      <li *ngIf="isLoggedIn" routerLinkActive="active"><a routerLink="logout">Logout</a></li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+  <router-outlet></router-outlet>
+</div>
