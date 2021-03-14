@@ -1,41 +1,27 @@
-<div class="col-md-12" *ngIf="person">
-    <form (ngSubmit)="onSubmit(form)" #form="ngForm">
-      <div class="form-group">
-		<label class="radio-inline">
-			<input type="radio" name="salutation" [ngModel]="person.salutation" value="mr">Mr.
-		</label>
-		<label class="radio-inline">
-			<input type="radio" name="salutation" [ngModel]="person.salutation" value="mrs">Mrs.
-		</label>
-	  </div>
-	  <div class="form-group">
-		<label for="firstname">Firstname:</label>
-		<input type="text" class="form-control" 
-		  id="firstname" name="firstname"
-		  [ngModel]="person.firstname"
-		  required 
-		  #firstname="ngModel">
-		  <span class="help-box" *ngIf="!firstname.valid && firstname.touched">Please enter a valid firstname!</span>
-	  </div>
-	  <div class="form-group">
-		<label for="lastname">Lastname:</label>
-		<input type="text" class="form-control" 
-		  id="lastname" name="lastname"
-		  [ngModel]="person.lastname"
-		  required
-		  #lastname="ngModel">
-		  <span class="help-box" *ngIf="!lastname.valid && lastname.touched">Please enter a valid lastname!</span>
-		</div>
-		<div class="form-group">
-		<label for="email">EMail:</label>
-		<input type="text" class="form-control" 
-		  id="email" name="email"
-		  [ngModel]="person.email"
-		  required
-		  #email="ngModel">
-		  <span class="help-box" *ngIf="!email.valid && email.touched">Please enter a valid email!</span>
-	  </div>
-	  <button type="submit" class="btn btn-primary" [disabled]="!form.valid">Save</button>
-	  <button type="button" class="btn btn-success" (click)="onCancel()">Cancel</button>
-	</form>
-</div>
+<h1>Editing Person</h1>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="firstname">Firstname:</label>
+      <input type="text" class="form-control" id="firstname" formControlName="firstname" 
+      [ngClass]="{
+        'is-invalid': form.controls.firstname.invalid && form.controls.firstname.dirty,
+        'is-valid': form.controls.firstname.valid && form.controls.firstname.dirty}">
+    </div>
+    <div class="form-group">
+      <label for="lastname">Lastname:</label>
+      <input type="text" class="form-control" id="lastname" formControlName="lastname"
+      [ngClass]="{
+        'is-invalid': form.controls.lastname.invalid && form.controls.lastname.dirty,
+        'is-valid': form.controls.lastname.valid && form.controls.lastname.dirty}">
+    </div>
+    <div class="form-group">
+      <label for="email">E-Mail:</label>
+      <input type="text" class="form-control" id="email" formControlName="email"
+      [ngClass]="{
+        'is-invalid': form.controls.email.invalid && form.controls.email.dirty,
+        'is-valid': form.controls.email.valid && form.controls.email.dirty}">
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="form.invalid">Ok</button>&nbsp;
+    <button type="button" class="btn btn-success" (click)="onCancel()">Cancel</button>
+</form>

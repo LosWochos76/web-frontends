@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { Seminar } from '../../shared/seminar.model';
-import { Person } from '../../shared/person.model';
-import { PersonService } from '../../shared/firebase/person.service';
-import { SeminarService } from '../../shared/firebase/seminar.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Person } from 'src/app/model/person';
+import { Seminar } from 'src/app/model/seminar';
+import { LoggingService } from 'src/app/shared/logging.service';
+import { PersonService } from 'src/app/shared/person.service';
+import { SeminarService } from 'src/app/shared/seminar.service';
+import { TeacherIsNoAttendeeValidator } from '../teacher-is-no-attendee-validator.service';
 
 @Component({
   selector: 'app-seminar-edit',
@@ -11,49 +14,66 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./seminar-edit.component.css']
 })
 export class SeminarEditComponent implements OnInit {
-  seminar: Seminar;
-  people: Person[];
+  id:string = "";
+  obj:Seminar = null;
+  form:FormGroup;
+  persons:Person[] = [];
 
   constructor(
-    private seminarService: SeminarService,
-    private personService: PersonService,
-    private route: ActivatedRoute,
-    private router: Router) { }
-
-  async ngOnInit() {
-    const id = this.route.snapshot.params['id'];
-
-    if (id === 'new') {
-      this.seminar = new Seminar('', '', '');
-    } else {
-      this.seminar = await this.seminarService.byId(id);
+    private logger:LoggingService, 
+    private route:ActivatedRoute,
+    private router:Router,
+    private service:SeminarService,
+    private person_service:PersonService,
+    private tinav:TeacherIsNoAttendeeValidator) { 
+      this.form = new FormGroup({
+        name: new FormControl("", [Validators.required, Validators.minLength(3)]),
+        venue: new FormControl("", [Validators.required, Validators.minLength(3)]),
+        date: new FormControl("", [Validators.required]),
+        teacher: new FormControl([], [Validators.required]),
+        attendees: new FormControl([], [Validators.required])
+      }, {
+        validators: this.tinav.validate
+      });
     }
 
-    this.people = await this.personService.getAll();
-    this.personService.changed.subscribe(async () => {
-      this.people = await this.personService.getAll(); }
-    );
-  }
+    async ngOnInit() {
+      this.id = this.route.snapshot.params['id'];
+      this.persons = await this.person_service.getAll();
+      
+      if (this.id != "0") {
+        this.obj = await this.service.get(this.id);
+      } else {
+        this.obj = new Seminar("", "", "", new Date());
+        this.obj.teacher = this.persons[0];
+      }
 
-  onSubmit(form) {
-    this.seminar.name = form.value.name;
-    this.seminar.description = form.value.description;
-    this.seminar.teacher = form.value.teacher;
-    this.seminar.attendees = form.value.attendees;
+      this.form.setValue({
+        name: this.obj.name,
+        venue: this.obj.venue,
+        date: this.obj.date,
+        teacher: [this.obj.teacher],
+        attendees: this.obj.attendees
+      });
+    }
 
-    this.seminarService.save(this.seminar);
-    this.router.navigate(['/seminar']);
-  }
+    onSubmit() {
+      if (this.form.invalid) {
+        this.logger.debug("Validation shows invalid data!");
+        return;
+      }
+  
+      this.obj.name = this.form.controls.name.value;
+      this.obj.venue = this.form.controls.venue.value;
+      this.obj.date = this.form.controls.date.value;
+      this.obj.teacher = this.form.controls.teacher.value[0];
+      this.obj.attendees = this.form.controls.attendees.value;
 
-  onCancel() {
-    this.router.navigate(['/seminar']);
-  }
+      this.service.save(this.obj);
+      this.router.navigate(["seminar"]);
+    }
 
-  isAttending(person: Person) {
-    return this.seminar.attendees.indexOf(person) >= 0;
-  }
-
-  compareByID(itemOne: Person, itemTwo: Person) {
-    return itemOne && itemTwo && itemOne.id === itemTwo.id;
-  }
+    onCancel() {
+      this.router.navigate(["seminar"]);
+    }
 }

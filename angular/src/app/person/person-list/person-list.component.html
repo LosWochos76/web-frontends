@@ -1,13 +1,37 @@
-<div class="row">
-  <div class="col-md-12">
-    <a routerLink="/person/new" class="btn btn-primary">New Person</a>
-    <a class="btn btn-primary" [ngClass]="current ? '' : 'disabled'" (click)="onEdit()">Edit Person</a>
-    <a class="btn btn-danger" [ngClass]="current ? '' : 'disabled'" (click)="onDelete()">Delete Person</a>
-    <hr>
-    <div class="list-group">
-      <a class="list-group-item" [ngClass]="current==person ? 'active' : ''" *ngFor="let person of all" (click)="onSelect(person)">
-        {{person.toString()}}
-      </a>
-    </div>
-  </div>
-</div>
+<button class="btn btn-primary" 
+  (click)="onAdd()">Add Person</button>
+&nbsp;
+
+<button class="btn btn-success" 
+  [disabled]="!isSelected()"
+  (click)="onEdit()">Edit Person</button>
+&nbsp;
+
+<button class="btn btn-danger" 
+  [disabled]="!isSelected()"
+  (click)="onDelete()">Delete Person</button>
+
+<br>
+<br>
+
+<table class="table table-bordered">
+<thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Firstname</th>
+      <th scope="col">Lastname</th>
+      <th scope="col">Email</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let person of objects; index as i" 
+        (click)="onSelect(person)"
+        (dblclick)="onEdit(person)"
+        [class.table-info]="person == selected">
+        <th scope="row">{{i + 1}}</th>
+        <td>{{person.firstname}}</td>
+        <td>{{person.lastname}}</td>
+        <td>{{person.email}}</td>
+    </tr>
+  </tbody>
+  </table>

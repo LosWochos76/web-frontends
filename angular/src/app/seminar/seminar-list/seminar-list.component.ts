@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Seminar } from '../../shared/seminar.model';
-import { SeminarService } from '../../shared/firebase/seminar.service';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
+import { Seminar } from 'src/app/model/seminar';
+import { LoggingService } from 'src/app/shared/logging.service';
+import { SeminarService } from 'src/app/shared/seminar.service';
 
 @Component({
   selector: 'app-seminar-list',
@@ -9,30 +10,46 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./seminar-list.component.css']
 })
 export class SeminarListComponent implements OnInit {
-  all: Seminar[] = [];
-  current: Seminar;
+  objects:Seminar[] = [];
+  selected:Seminar = null;
 
   constructor(
-    private seminarService: SeminarService,
-    private route: ActivatedRoute,
-    private router: Router) { }
+    private logger: LoggingService, 
+    private service:SeminarService,
+    private router:Router) { }
 
   async ngOnInit() {
-    this.all = await this.seminarService.getAll();
-    this.seminarService.changed.subscribe(async () => {
-      this.all = await this.seminarService.getAll();
+    this.objects = await this.service.getAll();
+    this.service.changed.subscribe(objects => {
+      this.objects = objects;
     });
   }
 
-  onSelect(seminar: Seminar) {
-    this.current = seminar;
+  onSelect(obj:Seminar) {
+    this.logger.debug("User selected a Seminar " + obj);
+    this.selected = obj;
   }
 
-  onEdit() {
-    this.router.navigate(['/seminar', this.current.id]);
+  isSelected() {
+    return this.selected != null;
   }
 
   onDelete() {
-    this.seminarService.delete(this.current.id);
+    if (!this.isSelected())
+      return;
+
+    this.logger.debug("User wants to delete a Seminar");
+    this.service.remove(this.selected);
+    this.selected = null;
+  }
+
+  onEdit() {
+    this.logger.debug("User wants to edit a Seminar");
+    this.router.navigate(['/seminar', this.selected.id]);
+  }
+
+  onAdd() {
+    this.logger.debug("User wants to add a Seminar");
+    this.router.navigate(['/seminar/0']);
   }
 }

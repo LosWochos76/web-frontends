@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Person } from '../../shared/person.model';
-import { Router, ActivatedRoute } from '@angular/router';
-import { NgForm } from '@angular/forms';
-import { PersonService } from '../../shared/firebase/person.service';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Person } from 'src/app/model/person';
+import { LoggingService } from 'src/app/shared/logging.service';
+import { PersonService } from 'src/app/shared/person.service';
 
 @Component({
   selector: 'app-person-edit',
@@ -10,30 +11,49 @@ import { PersonService } from '../../shared/firebase/person.service';
   styleUrls: ['./person-edit.component.css']
 })
 export class PersonEditComponent implements OnInit {
-  person: Person;
+  id:string = "";
+  obj:Person = null;
+  form:FormGroup;
 
   constructor(
-    private personService: PersonService,
-    private route: ActivatedRoute,
-    private router: Router) { }
+    private logger:LoggingService, 
+    private route:ActivatedRoute,
+    private router:Router,
+    private service:PersonService) { 
+      this.form = new FormGroup({
+        firstname: new FormControl("", [Validators.required, Validators.minLength(3)]),
+        lastname: new FormControl("", [Validators.required, Validators.minLength(3)]),
+        email: new FormControl("", [Validators.required, Validators.email])
+      });
+    };
 
   async ngOnInit() {
-    const id = this.route.snapshot.params['id'];
-
-    if (id === 'new') {
-      this.person = new Person('', '', '', '', '');
+    this.id = this.route.snapshot.params['id'];
+    
+    if (this.id != "0") {
+      this.obj = await this.service.get(this.id);
     } else {
-      this.person = await this.personService.byId(id);
+      this.obj = new Person("", "", "", "");
     }
+
+    this.form.setValue({
+      firstname: this.obj.firstname,
+      lastname: this.obj.lastname,
+      email: this.obj.email
+    });
   }
 
-  onSubmit(form: NgForm) {
-    this.person.salutation = form.value.salutation;
-    this.person.firstname = form.value.firstname;
-    this.person.lastname = form.value.lastname;
-    this.person.email = form.value.email;
-    this.personService.save(this.person);
-    this.router.navigate(['/person']);
+  onSubmit() {
+    if (this.form.invalid) {
+      this.logger.debug("Validation shows invalid data!");
+      return;
+    }
+
+    this.obj.firstname = this.form.controls.firstname.value;
+    this.obj.lastname = this.form.controls.lastname.value;
+    this.obj.email = this.form.controls.email.value;
+    this.service.save(this.obj);
+    this.router.navigate(["person"]);
   }
 
   onCancel() {

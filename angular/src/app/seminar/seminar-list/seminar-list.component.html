@@ -1,13 +1,36 @@
-<div class="row">
-  <div class="col-md-12">
-    <a routerLink="/seminar/new" class="btn btn-primary">New Seminar</a>
-    <a class="btn btn-primary" [ngClass]="current ? '' : 'disabled'" (click)="onEdit()">Edit Seminar</a>
-    <a class="btn btn-danger" [ngClass]="current ? '' : 'disabled'" (click)="onDelete()">Delete Seminar</a>
-    <hr>
-    <div class="list-group">
-      <a class="list-group-item" *ngFor="let seminar of all" (click)="onSelect(seminar)" [ngClass]="current == seminar ? 'active' : ''">
-        {{seminar.name}}
-      </a>
-    </div>
-  </div>
-</div>
+<button class="btn btn-primary" 
+  (click)="onAdd()">Add Seminar</button>
+&nbsp;
+
+<button class="btn btn-success" 
+  [disabled]="!isSelected()"
+  (click)="onEdit()">Edit Seminar</button>
+&nbsp;
+
+<button class="btn btn-danger" 
+    [disabled]="!isSelected()"
+    (click)="onDelete()">Delete Seminar</button>
+
+<br>
+<br>
+
+<table class="table table-bordered">
+<thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Venue</th>
+      <th scope="col">Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let obj of objects; index as i" 
+        (click)="onSelect(obj)" (dblclick)="onEdit()"
+        [class.table-info]="selected == obj">
+        <th scope="row">{{i + 1}}</th>
+        <td>{{obj.name}}</td>
+        <td>{{obj.venue}}</td>
+        <td>{{obj.date | date:"yyyy-MM-dd"}}</td>
+    </tr>
+  </tbody>
+  </table>

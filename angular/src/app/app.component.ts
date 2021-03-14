@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as firebase from 'firebase';
-import { AuthenticationService } from './shared/firebase/authentication.service';
+import { AuthorizationService } from './shared/authorization.service';
 
 @Component({
   selector: 'app-root',
@@ -8,12 +7,12 @@ import { AuthenticationService } from './shared/firebase/authentication.service'
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-	public isLoggedIn:boolean = false;
+  is_logged_in:boolean = false;
 
-	constructor(private authService:AuthenticationService) {
-		authService.stateChanged.subscribe((state) => { this.isLoggedIn = state; });
-	}
+  constructor(private auth:AuthorizationService) { }
 
-	ngOnInit() {
-    }
+  ngOnInit() {
+    this.is_logged_in = this.auth.isLoggedIn();
+    this.auth.changed.subscribe(result => this.is_logged_in = result);
+  }
 }

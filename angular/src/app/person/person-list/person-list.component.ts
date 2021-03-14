@@ -1,7 +1,9 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { Person } from '../../shared/person.model';
-import { Router, ActivatedRoute } from '@angular/router';
-import { PersonService } from '../../shared/firebase/person.service';
+import { stringify } from '@angular/compiler/src/util';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { LoggingService } from 'src/app/shared/logging.service';
+import { Person } from '../../model/person';
+import { PersonService } from '../../shared/person.service';
 
 @Component({
   selector: 'app-person-list',
@@ -9,31 +11,46 @@ import { PersonService } from '../../shared/firebase/person.service';
   styleUrls: ['./person-list.component.css']
 })
 export class PersonListComponent implements OnInit {
-  all: Person[];
-  current: Person;
+  objects:Person[] = [];
+  selected:Person = null;
 
   constructor(
-    private personService: PersonService,
-    private route: ActivatedRoute,
-    private router: Router) { }
+    private logger:LoggingService, 
+    private service:PersonService,
+    private router:Router) { }
 
   async ngOnInit() {
-    this.all = await this.personService.getAll();
-
-    this.personService.changed.subscribe(async () => {
-      this.all = await this.personService.getAll();
+    this.objects = await this.service.getAll();
+    this.service.changed.subscribe(async () => {
+      this.objects = await this.service.getAll();
     });
   }
-
-  onSelect(person: Person) {
-    this.current = person;
+  
+  onSelect(obj:Person) {
+    this.logger.debug("User selected a Person");
+    this.selected = obj;
   }
 
-  onEdit() {
-    this.router.navigate(['/person', this.current.id]);
+  isSelected() {
+    return this.selected != null;
   }
 
   onDelete() {
-    this.personService.delete(this.current.id);
+    if (!this.isSelected())
+      return;
+    
+    this.logger.debug("User wants to delete a Person");
+    this.service.remove(this.selected);
+    this.selected = null;
+  }
+
+  onEdit() {
+    this.logger.debug("User wants to edit a Person");
+    this.router.navigate(['/person', this.selected.id]);
+  }
+
+  onAdd() {
+    this.logger.debug("User wants to add a Person");
+    this.router.navigate(['/person/0']);
   }
 }

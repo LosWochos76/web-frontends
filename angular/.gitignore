@@ -4,6 +4,7 @@
 /dist
 /tmp
 /out-tsc
+/public
 
 # dependencies
 /node_modules
@@ -40,3 +41,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# Environments
+angular/src/environments/environment.prod.ts
+angular/src/environments/environment.ts

@@ -1,0 +1,17 @@
+<form>
+    <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" class="form-control" id="email" placeholder="Enter email" #email>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password" #password>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="onSubmit()">Login</button>
+</form>
+
+<br>
+
+<div class="alert alert-danger" role="alert" *ngIf="login_error">
+A user with that email or password was not found!
+</div>
