@@ -7,7 +7,12 @@
 /public
 
 # dependencies
-/node_modules
+/angular/node_modules
+/angular/src/environments/environment.prod.ts
+/angular/src/environments/environment.ts
+/angular/e2e/*.js
+/angular/e2e/*.map
+/angular/public/
 
 # IDEs and editors
 /.idea
@@ -34,14 +39,7 @@ npm-debug.log
 testem.log
 /typings
 
-# e2e
-/e2e/*.js
-/e2e/*.map
-
 # System Files
 .DS_Store
 Thumbs.db
 
-# Environments
-/angular/src/environments/environment.prod.ts
-/angular/src/environments/environment.ts
