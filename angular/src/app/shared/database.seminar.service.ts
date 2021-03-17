@@ -9,7 +9,7 @@ import { PersonService } from './person.service';
   providedIn: 'root'
 })
 export class SeminarService {
-  @Output() changed = new EventEmitter<Seminar[]>();
+  @Output() changed = new EventEmitter();
 
   constructor(
     private db: AngularFireDatabase,
@@ -31,7 +31,7 @@ export class SeminarService {
 
   async remove(obj:Seminar) {
     this.db.database.ref("seminars").child(obj.id).remove();
-    this.changed.emit(await this.getAll());
+    this.changed.emit();
   }
 
   async get(id:string) {
@@ -71,6 +71,6 @@ export class SeminarService {
       this.db.database.ref("seminars/" + obj.id).set(tmp);
     }
 
-    this.changed.emit(await this.getAll());
+    this.changed.emit();
   }
 }

@@ -24,7 +24,7 @@
     </div>
     <div class="form-group">
       <label for="teacher">Teacher:</label>
-      <app-person-select formControlName="teacher" [multiple]="false"></app-person-select>
+      <app-person-single-select formControlName="teacher"></app-person-single-select>
       <span class="text-danger" *ngIf="form.controls.teacher.touched && form.controls.teacher.invalid">
         A teacher is required!
       </span>
@@ -34,7 +34,7 @@
     </div>
     <div class="form-group">
       <label for="attendees">Attendees:</label>
-      <app-person-select formControlName="attendees" [multiple]="true"></app-person-select>
+      <app-person-multi-select formControlName="attendees"></app-person-multi-select>
       <span class="text-danger" *ngIf="form.controls.attendees.dirty && form.controls.attendees.invalid">
         At least one attendee is required!
       </span>

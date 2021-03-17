@@ -7,7 +7,7 @@ import { LoggingService } from './logging.service';
   providedIn: 'root'
 })
 export class PersonService {
-  @Output() changed = new EventEmitter<Person[]>();
+  @Output() changed = new EventEmitter();
   objects:Person[] = null;
 
   constructor(private logger: LoggingService) { }
@@ -31,7 +31,7 @@ export class PersonService {
     this.logger.debug("Removing person " + obj);
     let index = this.objects.findIndex(x => x.id == obj.id);
     this.objects.splice(index, 1);
-    this.changed.emit(await this.getAll());
+    this.changed.emit();
   }
 
   async get(id:string):Promise<Person> {
@@ -58,6 +58,6 @@ export class PersonService {
       this.objects.push(obj);
     }
 
-    this.changed.emit(await this.getAll());
+    this.changed.emit();
   }
 }

@@ -1,0 +1,4 @@
+<select  class="form-control form-select" aria-label="Select a teacher" id="teacher" (change)="onSelectChanged($event.target.value)">
+  <option selected disabled>Please select a Person</option>
+  <option *ngFor="let obj of all" [selected]="isSelected(obj)" value="{{obj.id}}">{{obj.firstname}} {{obj.lastname}}</option>
+</select>

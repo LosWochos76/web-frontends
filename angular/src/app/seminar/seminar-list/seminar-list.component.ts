@@ -20,8 +20,8 @@ export class SeminarListComponent implements OnInit {
 
   async ngOnInit() {
     this.objects = await this.service.getAll();
-    this.service.changed.subscribe(objects => {
-      this.objects = objects;
+    this.service.changed.subscribe(async () => {
+      this.objects = await this.service.getAll();
     });
   }
 

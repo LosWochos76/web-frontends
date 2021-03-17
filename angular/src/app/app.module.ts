@@ -19,8 +19,9 @@ import { AngularFireModule } from '@angular/fire';
 import { environment } from 'src/environments/environment';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { PersonSelectComponent } from './person/person-select/person-select.component';
+import { PersonMultiSelectComponent } from './Person/person-multi-select/person-multi-select.component';
 import { TeacherIsNoAttendeeValidator } from './Seminar/teacher-is-no-attendee-validator.service';
+import { PersonSingleSelectComponent } from './Person/person-single-select/person-single-select.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { TeacherIsNoAttendeeValidator } from './Seminar/teacher-is-no-attendee-v
     PageNotFoundComponent,
     LoginComponent,
     LogoutComponent,
-    PersonSelectComponent
+    PersonMultiSelectComponent,
+    PersonSingleSelectComponent
   ],
   imports: [
     BrowserModule,

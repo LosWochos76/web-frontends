@@ -4,20 +4,19 @@ import { Person } from 'src/app/model/person';
 import { PersonService } from 'src/app/shared/person.service';
 
 @Component({
-  selector: 'app-person-select',
-  templateUrl: './person-select.component.html',
-  styleUrls: ['./person-select.component.css'],
+  selector: 'app-person-multi-select',
+  templateUrl: './person-multi-select.component.html',
+  styleUrls: ['./person-multi-select.component.css'],
   providers: [
     {
        provide: NG_VALUE_ACCESSOR,
-       useExisting: forwardRef(() => PersonSelectComponent),
+       useExisting: forwardRef(() => PersonMultiSelectComponent),
        multi: true
     }
  ]
 })
-export class PersonSelectComponent implements OnInit, ControlValueAccessor {
+export class PersonMultiSelectComponent implements OnInit, ControlValueAccessor {
   @Input() selected:Person[] = [];
-  @Input() multiple:boolean = true;
   all:Person[] = [];
 
   onChanged: any = () => { };
@@ -61,11 +60,5 @@ export class PersonSelectComponent implements OnInit, ControlValueAccessor {
       this.selected.splice(index, 1);
       this.onChanged(this.selected);
     }
-  }
-
-  onSelectChanged(id:string) {
-    let index = this.all.findIndex(x => x.id == id);
-    this.selected = [this.all[index]];
-    this.onChanged(this.selected);
   }
 }

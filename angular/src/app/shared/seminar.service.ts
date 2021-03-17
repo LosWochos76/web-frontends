@@ -7,7 +7,7 @@ import { PersonService } from './person.service';
   providedIn: 'root'
 })
 export class SeminarService {
-  @Output() changed = new EventEmitter<Seminar[]>();
+  @Output() changed = new EventEmitter();
   objects:Seminar[] = null;
 
   constructor(
@@ -44,7 +44,7 @@ export class SeminarService {
     this.logger.debug("Removing seminar " + obj);
     let index = this.objects.findIndex(x => x.id == obj.id);
     this.objects.splice(index, 1);
-    this.changed.emit(await this.getAll());
+    this.changed.emit();
   }
 
   async get(id:string) {
@@ -71,6 +71,6 @@ export class SeminarService {
       this.objects.push(obj);
     }
 
-    this.changed.emit(await this.getAll());
+    this.changed.emit();
   }
 }

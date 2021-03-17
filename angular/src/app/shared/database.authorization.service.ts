@@ -7,11 +7,9 @@ import { AngularFireAuth } from '@angular/fire/auth';
 })
 export class AuthorizationService {
   private user:any = null;
-  changed:EventEmitter<boolean>;
+  changed:EventEmitter<boolean> = new EventEmitter<boolean>();
 
   constructor(private auth:AngularFireAuth) {
-    this.changed = new EventEmitter<boolean>();
-
     this.auth.authState.subscribe((user) => {
       if (user) {
         this.user = user;

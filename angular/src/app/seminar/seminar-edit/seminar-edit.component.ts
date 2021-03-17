@@ -30,9 +30,10 @@ export class SeminarEditComponent implements OnInit {
         name: new FormControl("", [Validators.required, Validators.minLength(3)]),
         venue: new FormControl("", [Validators.required, Validators.minLength(3)]),
         date: new FormControl("", [Validators.required]),
-        teacher: new FormControl([], [Validators.required]),
+        teacher: new FormControl(null, [Validators.required]),
         attendees: new FormControl([], [Validators.required])
-      }, {
+      }, 
+      {
         validators: this.tinav.validate
       });
     }
@@ -45,14 +46,13 @@ export class SeminarEditComponent implements OnInit {
         this.obj = await this.service.get(this.id);
       } else {
         this.obj = new Seminar("", "", "", new Date());
-        this.obj.teacher = this.persons[0];
       }
 
       this.form.setValue({
         name: this.obj.name,
         venue: this.obj.venue,
         date: this.obj.date,
-        teacher: [this.obj.teacher],
+        teacher: this.obj.teacher,
         attendees: this.obj.attendees
       });
     }
@@ -66,7 +66,7 @@ export class SeminarEditComponent implements OnInit {
       this.obj.name = this.form.controls.name.value;
       this.obj.venue = this.form.controls.venue.value;
       this.obj.date = this.form.controls.date.value;
-      this.obj.teacher = this.form.controls.teacher.value[0];
+      this.obj.teacher = this.form.controls.teacher.value;
       this.obj.attendees = this.form.controls.attendees.value;
 
       this.service.save(this.obj);

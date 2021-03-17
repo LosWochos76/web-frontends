@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormGroup, ValidationErrors, Validator } from '@angular/forms';
+import { FormGroup, ValidationErrors, Validator } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,6 @@ export class TeacherIsNoAttendeeValidator implements Validator {
     if (teacher == null || attendees == null)
       return null;
 
-    teacher = teacher[0];
     if (attendees.findIndex(x => (x != null && x.id == teacher.id)) == -1)
       return null;
 

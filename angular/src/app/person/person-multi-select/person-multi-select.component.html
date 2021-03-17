@@ -1,0 +1,4 @@
+<div class="form-check" *ngFor="let obj of all">
+  <input class="form-check-input" type="checkbox" [checked]="isChecked(obj)" (change)="onCheckboxChanged(obj, $event)">
+  <label class="form-check-label" for="flexCheckDefault">{{obj.firstname}} {{obj.lastname}}</label>
+</div>
