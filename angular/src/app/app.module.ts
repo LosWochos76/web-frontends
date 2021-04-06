@@ -22,6 +22,7 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { PersonMultiSelectComponent } from './Person/person-multi-select/person-multi-select.component';
 import { TeacherIsNoAttendeeValidator } from './Seminar/teacher-is-no-attendee-validator.service';
 import { PersonSingleSelectComponent } from './Person/person-single-select/person-single-select.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { PersonSingleSelectComponent } from './Person/person-single-select/perso
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireDatabaseModule,
-    AngularFireAuthModule
+    AngularFireAuthModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     LoggingService, 
